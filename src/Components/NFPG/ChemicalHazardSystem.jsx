@@ -112,7 +112,7 @@ const ChemicalHazardSystem = ({ addCard, isLogin }) => {
         <DiamondPart color="white" text={chemicalData.SPECIFIC_HAZARD || 'N/A'} position={{ bottom: 0, left: "50%", transform: "translateX(-50%) rotate(45deg)" }} />
       </Paper>
 
-      {isLogin ? (
+      {isLogin || localStorage.getItem('isLoggedIn') ? (
   <Button
     style={{ backgroundColor: "#607ff0", color: "#FFF", marginTop: isMobile ? 4 : 2, marginBottom: isMobile ? 4 : 4 }}
     variant="contained"
