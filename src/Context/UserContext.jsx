@@ -2,7 +2,8 @@ import React, { createContext, useState } from "react";
 import axios from "axios";
 
 // Axios instance creation
-const baseURL = "http://localhost:3000/api/v1/users";
+// const baseURL = "http://localhost:3000/api/v1/users";
+const baseURL = "https://safetyapp-wnjz.onrender.com/api/v1/users";
 const axiosInstance = axios.create({ baseURL });
 
 const UserContext = createContext();
