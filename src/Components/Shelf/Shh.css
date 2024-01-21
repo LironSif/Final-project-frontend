@@ -1,0 +1,17 @@
+.grid-div {
+  position: relative;
+  background-image: url("../../assets/shelf.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  /* height: 70vh; */
+  /* width: 40vw; */
+
+}
+
+.grid-div-2 {
+  width: 60%;
+}

@@ -1,0 +1,91 @@
+main {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+ 
+}
+.header {
+  text-align: center;
+  margin-top: 20px; 
+}
+.search-bar {
+  text-align: center;
+  margin: 20px auto; 
+}
+.search-bar input {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  width: 50%; 
+}
+.nfpa-diamond {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px; 
+}
+.diamond-part {
+  border: 2px solid black;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  transform: rotate(45deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.diamond-part p {
+  margin: 0;
+  font-size: 1rem;
+  transform: rotate(-45deg); 
+  line-height: normal;
+}
+.red {
+  background-color: red;
+  top: 0px;
+  z-index: 1;
+}
+.blue {
+  background-color: blue;
+  left: 0;
+  z-index: 1;
+}
+.yellow {
+  background-color: yellow;
+  color: black; 
+  right: 0;
+  z-index: 1;
+}
+.white {
+  background-color: white;
+  color: black; 
+  bottom: 0;
+  z-index: 1;
+}
+
+.btn-func {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.btn-func button{
+  gap: 10px;
+  margin: 100px;
+  padding: 10px;
+  background-color: rgb(140, 140, 223);
+  border-radius: 5px;
+  
+
+}

@@ -1,0 +1,12 @@
+.shelfCellStyle {
+  width: 6vw;
+  height: 8vh;
+  margin: 4vh;
+}
+
+.shelfCellStyle.empty {
+  width: 8vw;
+  height: 8vh;
+  margin: 4vh;
+  background-image: none;
+}
