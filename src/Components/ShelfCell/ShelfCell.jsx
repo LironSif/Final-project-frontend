@@ -8,8 +8,6 @@ import "./ShelfCell.css";
 import boxImage from "../../assets/img/box2.png";
 
 const ShelfCell = ({ cellId, content, onDropItem }) => {
-// const ShelfCell = React.memo(({ cellId, content, onDropItem }) => {
-  // console.log("drop")
   const [{ isOver }, dropRef] = useDrop(() => ({
     accept: "MATERIAL_ITEM",
     drop: (item) => onDropItem(item),
@@ -38,6 +36,10 @@ const ShelfCell = ({ cellId, content, onDropItem }) => {
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
         backgroundColor: "transparent",
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+
       }
     : { backgroundColor: isOver ? "#f5f5f5" : "transparent" };
 
@@ -53,7 +55,7 @@ const ShelfCell = ({ cellId, content, onDropItem }) => {
           {getItemIcon(content.state)}
           <Typography
             variant="subtitle1"
-            sx={{ color: "black", fontWeight: "bold" }}
+            sx={{ color: "black", fontWeight: "bold", fontSize:"0.75em"}}
           >
             {content.type}
           </Typography>

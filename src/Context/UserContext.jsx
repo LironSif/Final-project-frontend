@@ -1,6 +1,7 @@
 import React, { createContext, useState } from "react";
 import axios from "axios";
 
+
 // Axios instance creation
 // const baseURL = "http://localhost:3000/api/v1/users";
 const baseURL = "https://safetyapp-wnjz.onrender.com/api/v1/users";
@@ -49,7 +50,6 @@ export const UserProvider = ({ children }) => {
   
         setUserData(response.data.user)
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem("loggedInUserId", response.data._id);
         localStorage.setItem("loggedInUserName", response.data.name);
         localStorage.setItem("isLoggedIn", true);
 
@@ -75,7 +75,7 @@ export const UserProvider = ({ children }) => {
   // Authenticate the User
   const authTheUser = async (token) => {
     try {
-      const response = await axiosInstance.post("/s/me", {
+      const response = await axiosInstance.get("/s/me", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -92,7 +92,6 @@ export const UserProvider = ({ children }) => {
   };
 
   const logoutUser = () => {
-    localStorage.removeItem("loggedInUserId"); // Clear user ID from local storage
     localStorage.removeItem("token"); // Clear user Token from local storage
     localStorage.removeItem("loggedInUserName");
     localStorage.setItem("isLoggedIn", false);
@@ -154,14 +153,61 @@ const updateUserData = async (newUserData) => {
   }
 }
 
+const sendScreenshotToBackend = async (file) => {
+  console.log(file);
+  console.log("Sending screenshot to backend");
+  const formData = new FormData();
+  formData.append('image', file); // 'image' should match the field name expected by multer
 
+  // Get the logged-in user's ID from local storage
+  const userId = localStorage.getItem('loggedInUserId');
+  if (!userId) {
+    console.error("User ID not found. User might not be logged in.");
+    return;
+  }
 
+  // Append the user ID to the form data
+  formData.append('userId', userId);
+
+  try {
+      const response = await axiosInstance.post('/image', formData, {
+          headers: {
+              'Content-Type': 'multipart/form-data'
+          }
+      });
+      console.log("Response:", response.data);
+  } catch (error) {
+      console.error("Error sending screenshot:", error);
+  }
+};
+
+// ..........................................ai....................................................
+const sendPromptToOpenAi = async (prompt) => {
+  console.log(prompt)
+  
+  try {
+    const response = await axiosInstance.post('/ai',{ prompt });
+
+    if (response.status === 200) {
+      console.log("OpenAI response:", response.data);
+      return response.data; // Contains the OpenAI's response
+    } else {
+      console.error('Unexpected response status:', response.status);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error communicating with OpenAI:", error);
+    throw error;
+  }
+};
+
+// ..........................................ai....................................................
 
 // ................................................................................................
   // Provide registerUser, loginTheUser, authTheUser, and error through the context
   return (
     <UserContext.Provider
-      value={{ registerUser, loginTheUser, authTheUser, logoutUser,updateUserData, getUserData, setUserData, userData, error }}
+      value={{ registerUser, loginTheUser, authTheUser, logoutUser,updateUserData, getUserData, setUserData, sendScreenshotToBackend, sendPromptToOpenAi, userData, error }}
     >
       {children}
     </UserContext.Provider>

@@ -37,14 +37,14 @@ const MaterialItem = ({ type, label, state, quantity }) => {
         margin: 5,
         display: 'flex',
         alignItems: 'center',
-        gap: '2vw',
+        gap: '1vw',
         opacity: isDragging ? 0.5 : 1,
         backgroundColor: backgroundColors[state] || 'white',
       }}
     >
       {stateIcons[state]}
       <Box>
-        <Typography variant="subtitle1">{label}</Typography>
+        <Typography variant="subtitle1">{label} </Typography>
         <Typography variant="caption">Quantity: {quantity}</Typography>
       </Box>
     </Paper>
