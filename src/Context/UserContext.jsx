@@ -95,8 +95,8 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem("token"); // Clear user Token from local storage
     localStorage.removeItem("loggedInUserName");
     localStorage.setItem("isLoggedIn", false);
-
     localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("loggedInUserId");
    
   };
 // ...............................................................................................
