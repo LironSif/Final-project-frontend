@@ -17,27 +17,39 @@ const Dashboard = () => {
   const shelfRef = useRef(null);
   const { userData, getUserData, sendPromptToOpenAi } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true), [cards, setCards] = useState({}), [shouldRefetchUserData, setShouldRefetchUserData] = useState(false);
-  const [localShelf, setLocalShelf] = useState(), [availableChemicals, setAvailableChemicals] = useState({}), [isModalOpen, setIsModalOpen] = useState(false);
+  const [localShelf, setLocalShelf] = useState({}), [availableChemicals, setAvailableChemicals] = useState({}), [isModalOpen, setIsModalOpen] = useState(false);
   const theme = useTheme(), isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const chemicalsArray = userData ? Object.values(userData.chemicals) : [];
   const totalChemicals = chemicalsArray.length, flammableCount = chemicalsArray.filter((c) => c.FLAMMABLE).length, corrosiveCount = chemicalsArray.filter((c) => c.CORROSIVE).length, oxidizerCount = chemicalsArray.filter((c) => c.OXIDIZER).length, maxChemicals = 12;
 
   useEffect(() => {
+    console.log("Checking if user is logged in");
     const isInitiallyLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    if (isInitiallyLoggedIn) getUserData().then((success) => setIsLoading(!success));
-    else { setIsLoading(false); setIsModalOpen(true); }
+    console.log("User is logged in?:", isInitiallyLoggedIn);
+    
+    if (isInitiallyLoggedIn) {
+      getUserData().then((success) => {
+        setIsLoading(!success);
+        console.log("Fetching user data");
+      });
+    } else {
+      setIsLoading(false);
+      setIsModalOpen(true);
+      console.log("Opening modal");
+    }
   }, []);
+  
 
   useEffect(() => {
     if (userData && !isLoading) { setLocalShelf(userData.shelfConfig); setAvailableChemicals(userData.chemicals || {}); setCards(userData.chemicals); }
   }, [userData, isLoading]);
 
-  useEffect(() => {
-    if (shouldRefetchUserData) getUserData().then((success) => { setIsLoading(!success); setShouldRefetchUserData(false); });
-  }, [shouldRefetchUserData]);
+  // useEffect(() => {
+  //   if (shouldRefetchUserData) getUserData().then((success) => { setIsLoading(!success); setShouldRefetchUserData(false); });
+  // }, [shouldRefetchUserData]);
 
   if (isLoading) return <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}><CircularProgress /></Box>;
-  if (!localShelf) return <div>Loading Shelf Configuration...</div>;
+  // if (!localShelf) return <div>Loading Shelf Configuration...</div>;
 
 
   const handleClear = (newShelfConfig) => {
@@ -72,32 +84,32 @@ const Dashboard = () => {
         </Box>
 
 
-        <Typography variant="h2" sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2, mb: 4 }}>Material Organizer</Typography>
+         <Typography variant="h2" sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2, mb: 4 }}>Material Organizer</Typography>
 
-<Box sx={{ display: "flex", flexDirection: isSmallScreen ? "column" : "row", justifyContent: "space-around", gap: 4, width: isSmallScreen ? '90%' : 'auto', margin: isSmallScreen ? '0 auto' : 'initial' }}>
+        <Box sx={{ display: "flex", flexDirection: isSmallScreen ? "column" : "row", justifyContent: "space-around", gap: 4, width: isSmallScreen ? '90%' : 'auto', margin: isSmallScreen ? '0 auto' : 'initial' }}>
 
-  <div className="material-list">{Object.values(availableChemicals).map((el, i) => (
-    <div key={i}>
-      <MaterialItem type={el.Name} label={el.Name} state={el.STATE} quantity={el.quantity} />
-    </div>
-  ))}</div>
+          <div className="material-list">{Object.values(availableChemicals).map((el, i) => (
+            <div key={i}>
+              <MaterialItem type={el.Name} label={el.Name} state={el.STATE} quantity={el.quantity} />
+            </div>
+          ))}</div>
 
-  <Paper>
-    <Shelf shelfConfig={localShelf} shelfSetter={setLocalShelf} ref={shelfRef} />
-  </Paper>
-  <Box sx={{ display: "flex", flexDirection: "row", width: isSmallScreen ? '90%' : '30%', alignItems: "start", gap: 1, top: "100" }}>
-    <AiAssistantButton chemicals={localShelf} />
-  </Box>
-</Box>
+          <Paper>
+            <Shelf shelfConfig={localShelf} shelfSetter={setLocalShelf} ref={shelfRef} />
+          </Paper>
+          <Box sx={{ display: "flex", flexDirection: "row", width: isSmallScreen ? '90%' : '30%', alignItems: "start", gap: 1, top: "100" }}>
+            <AiAssistantButton chemicals={localShelf} />
+          </Box>
+        </Box>
 
-<FullScreenModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} isUserLoggedIn={!isModalOpen} />
-
-<Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2, mb: 2, mt: 4 }}>
-  <ScreenshotButton shelfRef={shelfRef} />
-  <ClearButton onClear={handleClear} />
-</Box>
-</Box>
-</DndProvider>
+        <FullScreenModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} isUserLoggedIn={!isModalOpen} />
+  
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2, mb: 2, mt: 4 }}>
+          <ScreenshotButton shelfRef={shelfRef} />
+          <ClearButton onClear={handleClear} />
+        </Box>
+      </Box>
+    </DndProvider>
   );
 };
 

@@ -97,20 +97,26 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem("isLoggedIn", false);
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("loggedInUserId");
+    setUserData(null);
    
   };
 // ...............................................................................................
 
 const getUserData = async () => {
-  const id = localStorage.getItem('loggedInUserId')
-  console.log("fetching user data")
+  console.log("try to get user data")
+  const id = localStorage.getItem('loggedInUserId');
+  if (!id) {
+    console.error("No user ID found ");
+    return false; // Return false if the is not available
+  }
+  console.log("Fetching user data for ID:", id);
   try {
     const response = await axiosInstance.get(`/${id}`);
     setUserData(response.data);
     return true; // Indicates successful data fetch
   } catch (error) {
-    console.log(error);
-    return false; // Indicates an error occurred
+    console.error("Error fetching user data:", error.response ? error.response.data : error.message);
+    return false; // Return false if an error occurred during fetch
   }
 };
 
