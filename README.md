@@ -32,9 +32,11 @@ To set up SafetyApp, follow these steps:
 
 ## Site's Preview
 
-![Home](../safetyApp/src/assets/screenShot/Capture.PNG)
-![Dashboard](../safetyApp/src/assets/screenShot/Capture2.PNG)
-![Chemical Details](../safetyApp/src/assets/screenShot/Capture3.PNG)
+
+![Home](https://github.com/LironSif/Final-project-frontend/blob/main/src/assets/screenShot/Capture.PNG?raw=true)
+![Dashboard](https://github.com/LironSif/Final-project-frontend/blob/main/src/assets/screenShot/Capture2.PNG?raw=true)
+![Chemical Details](https://github.com/LironSif/Final-project-frontend/blob/main/src/assets/screenShot/Capture3.PNG?raw=true)
+
 
 ## Languages and Tools
 
