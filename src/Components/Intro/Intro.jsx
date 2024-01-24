@@ -35,7 +35,7 @@ const Intro = () => {
       </Typography>
      
       <Typography variant="h5" sx={{ zIndex: 1, mb: 3, color:"black" }}>
-        Discover how we are enhancing your experience with new Ai AiAssistant.
+        Discover how we are enhancing your experience with new Ai Assistant.
       </Typography>
       <Button onClick={navigateToSomePage} variant="contained" size="large" color="primary" sx={{ zIndex: 1 }}>
         Learn More  
