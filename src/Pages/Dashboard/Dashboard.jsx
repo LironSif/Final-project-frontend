@@ -72,32 +72,32 @@ const Dashboard = () => {
         </Box>
 
 
-        <Typography variant="h2" sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2, mb: 4 }}>Material organizer</Typography>
+        <Typography variant="h2" sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2, mb: 4 }}>Material Organizer</Typography>
 
-  
+<Box sx={{ display: "flex", flexDirection: isSmallScreen ? "column" : "row", justifyContent: "space-around", gap: 4, width: isSmallScreen ? '90%' : 'auto', margin: isSmallScreen ? '0 auto' : 'initial' }}>
 
-          <Box sx={{ display: "flex", flexDirection: isSmallScreen ? "column" : "row", justifyContent: "space-around", gap: 4 }}>
+  <div className="material-list">{Object.values(availableChemicals).map((el, i) => (
+    <div key={i}>
+      <MaterialItem type={el.Name} label={el.Name} state={el.STATE} quantity={el.quantity} />
+    </div>
+  ))}</div>
 
-            <div className="material-list">{Object.values(availableChemicals).map((el, i) => <div key={i}>
-              
-              <MaterialItem type={el.Name} label={el.Name} state={el.STATE} quantity={el.quantity} /></div>)}</div>
+  <Paper>
+    <Shelf shelfConfig={localShelf} shelfSetter={setLocalShelf} ref={shelfRef} />
+  </Paper>
+  <Box sx={{ display: "flex", flexDirection: "row", width: isSmallScreen ? '90%' : '30%', alignItems: "start", gap: 1, top: "100" }}>
+    <AiAssistantButton chemicals={localShelf} />
+  </Box>
+</Box>
 
-            <Paper >
-              <Shelf shelfConfig={localShelf} shelfSetter={setLocalShelf} ref={shelfRef} />
-            </Paper>
-            <Box sx={{ display: "flex", flexDirection: "row", width:"30%", alignItems: "start", gap: 1, top:"100" }}>
-              <AiAssistantButton chemicals={localShelf}  />
-            </Box>
-          </Box>
- 
-          <FullScreenModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} isUserLoggedIn={!isModalOpen} />
-    
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2, mb: 2 ,mt:4}}>
-        <ScreenshotButton shelfRef={shelfRef} />
-              <ClearButton onClear={handleClear} />
-        </Box>
-      </Box>
-    </DndProvider>
+<FullScreenModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} isUserLoggedIn={!isModalOpen} />
+
+<Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2, mb: 2, mt: 4 }}>
+  <ScreenshotButton shelfRef={shelfRef} />
+  <ClearButton onClear={handleClear} />
+</Box>
+</Box>
+</DndProvider>
   );
 };
 
