@@ -33,11 +33,9 @@ const Intro = () => {
       <Typography variant="h2" sx={{ zIndex: 1, color:"#FFF", fontWeight: 'bold', mb: 2 }}>
         Introducing Our New Features
       </Typography>
-      {/* <Typography variant="h3" sx={{ zIndex: 1, color:"RGB(77, 116, 254)", fontWeight: 'bold', mb: 2 }}>
-        Dashboard 
-      </Typography> */}
-      <Typography variant="h5" sx={{ zIndex: 1, mb: 3 }}>
-        Discover how we are enhancing your experience.
+     
+      <Typography variant="h5" sx={{ zIndex: 1, mb: 3, color:"black" }}>
+        Discover how we are enhancing your experience with new Ai AiAssistant.
       </Typography>
       <Button onClick={navigateToSomePage} variant="contained" size="large" color="primary" sx={{ zIndex: 1 }}>
         Learn More  

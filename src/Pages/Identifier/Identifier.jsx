@@ -10,9 +10,7 @@ import LiquidIcon from "@mui/icons-material/Opacity";
 import SolidIcon from "@mui/icons-material/Drafts";
 import UserContext from "../../Context/UserContext.jsx";
 
-
 const ChemicalCard = ({ card, onRemove }) => {
-
   const cardStyle = {
     width: "95%",
     height: "4vh",
@@ -27,36 +25,64 @@ const ChemicalCard = ({ card, onRemove }) => {
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
   };
 
+  const textStyle = {
+    flexGrow: 1,
+    display: 'flex',
+    justifyContent: 'flex-start',
+    whiteSpace: 'nowrap',       // Prevents text from wrapping to the next line
+    overflow: 'hidden',         // Hides overflowed text
+    textOverflow: 'ellipsis', 
+    width: "1rem",  // Adds an ellipsis to truncated text
+  };
+  
+  const quantityStyle = {
+    flexGrow: 1,
+    display: 'flex',
+    justifyContent: 'center', 
+  };
+  
+  const iconButtonStyle = {
+    width: '40px', 
+  };
+  
   return (
     <div style={cardStyle}>
-      <Typography variant="body1">{card.Name}</Typography>
-      <Typography variant="body2">{card.quantity ?` quantity ${card.quantity}` : 0}</Typography>
-      <IconButton size="small" onClick={() => onRemove(card.id)}>
-        <CloseIcon fontSize="small" />
-      </IconButton>
+      <div style={textStyle}>
+        <Typography variant="body1">{card.Name}</Typography>
+      </div>
+      <div style={quantityStyle}>
+        <Typography variant="body2">{card.quantity ? ` quantity ${card.quantity}` : 0}</Typography>
+      </div>
+      <div style={iconButtonStyle}>
+        <IconButton size="small" onClick={() => onRemove(card.id)}>
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </div>
     </div>
   );
 };
 
 const Identifier = () => {
   const [cards, setCards] = useState({});
-  const [isLogin, setIsLogin] = useState();
-  const { userData, setUserData, updateUserData, getUserData} = useContext(UserContext);
+  const { userData, setUserData, updateUserData, getUserData } = useContext(UserContext);
 
   useEffect(() => {
     if (!userData) {
-      getUserData()
-
-      if(!getUserData){
-        setIsLogin(false)
-      }else{
-        setIsLogin(true)
-      }
-      return
-    };
-    setCards(userData.chemicals);
-  }, [userData]);
-
+      getUserData();
+    }
+  }, []); 
+  
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    if (isLoggedIn && userData) {
+      console.log(isLoggedIn)
+      console.log(userData)
+      setCards(userData.chemicals);
+    } else {
+      setCards({});
+    }
+  }, [userData]); 
+  
   const addCard = (newCardData) => {
     const temp = { ...cards };
     if (temp[newCardData.id]) {
@@ -66,9 +92,10 @@ const Identifier = () => {
     }
   
     const newUserChemData = { ...userData, chemicals: temp, userId: localStorage.getItem("loggedInUserId")};
-  
+    
     updateUserData(newUserChemData)
       .then(() => {
+        console.log("Added new card, updating state:", temp);
         if (userData) {
           setUserData({ ...userData, chemicals: temp });
         }
@@ -76,10 +103,8 @@ const Identifier = () => {
       })
       .catch(error => {
         console.error("Error updating chemicals:", error);
-      
       });
   };
-  
   const removeCard = (cardId) => {
     const updatedCards = { ...cards };
     delete updatedCards[cardId];
@@ -100,6 +125,10 @@ const Identifier = () => {
   }
 
   function chemicalDataMassagingFunc(cards) {
+    if (!cards || typeof cards !== 'object') {
+      return [];
+    }
+
     return Object.values(cards)
       .map((chemical) => {
         const { Name, CORROSIVE, OXIDIZER, FLAMMABLE, STATE } = chemical;
@@ -121,52 +150,56 @@ const Identifier = () => {
 
   return (
     <Box sx={{ flexGrow: 1, mt: 4, mx: 4 }}>
-   
       <Grid container spacing={4}>
-        {/* Section 1: ChemicalHazardSystem */}
         <Grid item xs={12} md={6}>
           <Paper sx={{ height: "83vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <ChemicalHazardSystem addCard={addCard} isLogin={isLogin}/>
+            <ChemicalHazardSystem addCard={addCard} isLogin={localStorage.getItem("isLogin") === "true"}/>
           </Paper>
         </Grid>
   
         <Grid item xs={12} md={6}>
-          {/* Section 2: Additional Info */}
           <Paper sx={{ height: "40vh", p: 2,  display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: "2rem" }}>
             <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold", color: "#333" }}>Additional Info</Typography>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, width: '70%' ,overflowY: 'auto'}}>
-              {hazardousChemicalsData.map((chemical, index) => (
-                <li key={index} style={{ display: "flex", justifyContent: 'flex-start', alignItems: "center", marginBottom: "10px" }}>
-                  <span style={{ display: "flex", alignItems: "center", color: "black", fontWeight: "bold" }}>
-                    {chemical.name} -
-                    {renderIconWithLabel(chemical.flammable, <FlameIcon sx={{ color: "white", ml: "5px" }}/>, "Flammable")}
-                    {renderIconWithLabel(chemical.corrosive, <CorrosiveIcon sx={{ color: "orange", ml: "5px" }}/>, "Corrosive")}
-                    {renderIconWithLabel(chemical.oxidizer, <OxidizerIcon sx={{ color: "purple", ml: "5px" }}/>, "Oxidizer")}
-                    {renderIconWithLabel(chemical.state === "Gas", <GasIcon sx={{color: "#bac45a", ml: "5px" }}/>, "Gas")}
-                    {renderIconWithLabel(chemical.state === "Liquid", <LiquidIcon sx={{color: "blue", ml: "5px" }}/>, "Liquid")}
-                    {renderIconWithLabel(chemical.state === "Solid", <SolidIcon sx={{ color: "green", ml: "5px" }}/>, "Solid")}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            {hazardousChemicalsData.length > 0 ? (
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, width: '70%', overflowY: 'auto'}}>
+                {hazardousChemicalsData.map((chemical, index) => (
+
+                  <li key={index} style={{ display: "flex", justifyContent: 'flex-start', alignItems: "center", marginBottom: "10px" }}>
+
+                    <span style={{ display: "flex", alignItems: "center", color: "black", fontWeight: "bold", justifyContent: 'flex-start', width:"90%"}}>
+                      
+                      {chemical.name} -
+                      {renderIconWithLabel(chemical.flammable, <FlameIcon sx={{ color: "white", ml: "5px" }}/>, "Flammable")}
+                      {renderIconWithLabel(chemical.corrosive, <CorrosiveIcon sx={{ color: "orange", ml: "5px" }}/>, "Corrosive")}
+                      {renderIconWithLabel(chemical.oxidizer, <OxidizerIcon sx={{ color: "purple", ml: "5px" }}/>, "Oxidizer")}
+                      {renderIconWithLabel(chemical.state === "Gas", <GasIcon sx={{color: "#bac45a", ml: "5px" }}/>, "Gas")}
+                      {renderIconWithLabel(chemical.state === "Liquid", <LiquidIcon sx={{color: "blue", ml: "5px" }}/>, "Liquid")}
+                      {renderIconWithLabel(chemical.state === "Solid", <SolidIcon sx={{ color: "green", ml: "5px" }}/>, "Solid")}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Typography>No chemicals in your inventory. Add chemicals to view additional info.</Typography>
+            )}
           </Paper>
   
-          {/* Section 3: Warehouse Inventory */}
-      
-        <Paper sx={{ height: "40vh", display: "flex", flexDirection: "column", alignItems: "center", p: 2, marginTop: "2rem" }}>
-          <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold", color: "#333" }}>Warehouse inventory</Typography>
-          <div style={{ overflowY: "auto", width: "70%", height: "calc(40vh - 48px)" }}>
-            {Object.values(cards).map((card, index) => {
-              return <ChemicalCard key={index} card={card} onRemove={removeCard} />;
-            })}
-          </div>
-        </Paper>
- 
+          <Paper sx={{ height: "40vh", display: "flex", flexDirection: "column", alignItems: "center", p: 2, marginTop: "2rem" }}>
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold", color: "#333" }}>Warehouse inventory</Typography>
+            {Object.keys(cards).length > 0 ? (
+              <div style={{ overflowY: "auto", width: "70%", height: "calc(40vh - 48px)" }}>
+                {Object.values(cards).map((card, index) => (
+                  <ChemicalCard key={index} card={card} onRemove={removeCard} />
+                ))}
+              </div>
+            ) : (
+              <Typography>No chemicals in your inventory. Add chemicals to your warehouse.</Typography>
+            )}
+          </Paper>
         </Grid>
       </Grid>
     </Box>
   );
-  
 };
 
 export default Identifier;

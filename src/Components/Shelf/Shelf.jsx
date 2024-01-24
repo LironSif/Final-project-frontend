@@ -41,10 +41,10 @@ const Shelf = forwardRef(({ shelfConfig, shelfSetter,onShelfUpdate }, ref) => {
     // Attach the ref to the outer div
     <div className="grid-div" ref={ref}>
       {/* <h3 onClick={()=>console.log(shelfConfig)}>TESTER</h3> */}
-      {Object.keys(shelfConfig).map((shelf) => (
+      {Object.keys(shelfConfig).map((shelf,index) => (
         <div
           style={{ display: "flex", justifyContent: "center" ,}}
-          key={shelf}
+          key={index}
         >
           {Object.keys(shelfConfig[shelf]).map((spot) => (
             <ShelfCell

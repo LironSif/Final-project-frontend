@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Modal, Paper, TextField, Typography, useTheme, useMediaQuery, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { Box, Button, Modal, Paper, TextField, Typography, useTheme, useMediaQuery, Select, MenuItem, FormControl, InputLabel,Autocomplete } from "@mui/material";
 import { chemicals, hazardInformation } from "./ChemicalData.js";
 
 import DiamondPart from "../DiamondParts/DiamondPart .jsx"
@@ -101,8 +101,8 @@ const ChemicalHazardSystem = ({ addCard, isLogin }) => {
 
       <Paper sx={{
         position: "relative",
-        width: isMobile ? 200 : 250,
-        height: isMobile ? 200 : 250,
+        width: isMobile ? 250 : 250,
+        height: isMobile ? 250 : 250,
         mt: 2,
         mb: isMobile ? 4 : 2
       }} elevation={0}>
