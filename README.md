@@ -17,7 +17,7 @@ SafetyApp is a full-stack MERN project designed to aid occupational safety inspe
 
 - **Demo Account:** To explore the app, log in using the demo account.
   - Username: demo@safetyapp.com
-  - Password: safe123
+  - Password: Safe1234
 - **Creating an Account:** Users can sign up to create a personalized account. Passwords are secured using JWT.
 
 ## Site's Preview
